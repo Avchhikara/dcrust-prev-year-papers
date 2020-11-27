@@ -1,40 +1,37 @@
-const puppeteer = require("puppeteer");
-const cheerio = require("cheerio");
+const express = require("express");
+const mongoose = require("mongoose");
+const bodyParser = require("body-parser");
 
-const getWebPage = require("./controllers/getWebPage");
-const getExams = require("./controllers/getExamMonths");
-const getURLsWithoutPHD = require("./controllers/getURLsWithoutPHD");
-const readQPSubNames = require("./controllers/getQPSubName");
-const getQPSubName = require("./controllers/getQPSubName");
+const app = express();
 
-const url = "https://www.dcrustedp.in/dcrustpqp.php";
+const dotenv = require("dotenv");
+dotenv.config();
 
-(async () => {
-  const appendHrefWith = "https://www.dcrustedp.in/";
-  const browser = await puppeteer.launch({ headless: true });
-  let page = await browser.newPage();
-  await page.goto(url);
-  const htmlString = await page.content();
-  const $ = await cheerio.load(htmlString);
-  const nextURLs = await getURLsWithoutPHD($, appendHrefWith);
-  for (let { url, text } of nextURLs) {
-    await page.goto(url);
-    let courseAlphabets = await page.$$("button.mybtns");
-    for (let index = 0; index < courseAlphabets.length; index++) {
-      courseAlphabet = courseAlphabets[index];
-      await Promise.all([courseAlphabet.click(), page.waitForNavigation()]);
-      const htmlStr = await page.content();
-      const $ = await cheerio.load(htmlStr);
-      const qPDetails = await getQPSubName($, appendHrefWith);
-      // Now, decide on what to do with these quesion papers
-      // Tips: Store in a DB, build UI for better querying etc
-      console.log(qPDetails);
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
-      await page.goto(url);
-      courseAlphabets = await page.$$("button.mybtns");
-    }
-    await page.goBack();
-  }
+const saveMongoData = require("./controllers/saveMongoData");
+const getPaper = require("./controllers/getPaper");
 
-  browser.close();
-})();
+// Connecting with mongodb
+mongoose.connect(process.env.MONGODB_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
+
+app.get("/", async (req, res) => {
+  res.send("Welcome to homepage");
+});
+
+app.get("/paper", async (req, res) => {
+  const papers = await getPaper(req, res, mongoose);
+  res.send(papers);
+});
+
+// For saving of exam papers
+app.get("/save", async (req, res) => {
+  await saveMongoData();
+  res.send("Data has been written");
+});
+
+app.listen(process.env.PORT || 3000, () => console.log("App is started"));
