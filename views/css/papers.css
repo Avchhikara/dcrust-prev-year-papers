@@ -1,0 +1,29 @@
+main {
+  text-align: center;
+  font-family: courier;
+  color: black;
+}
+
+main .title-bar {
+  color: black;
+  font-size: larger;
+}
+
+.title-bar a {
+  font-size: small;
+}
+
+li a {
+  padding: 10px;
+  display: inline-block;
+  border: 1px solid black;
+  margin-top: 10px;
+}
+
+ul {
+  list-style: none;
+}
+
+li {
+  margin: 10px;
+}

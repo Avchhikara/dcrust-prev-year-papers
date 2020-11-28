@@ -1,14 +1,31 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
+const exphbs = require("express-handlebars");
 
 const app = express();
+
+// TODO: Remove the duplicates problem, and build the UI, Use pug or handlebars for UI
 
 const dotenv = require("dotenv");
 dotenv.config();
 
+app.use(express.static("views"));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.engine(
+  "hbs",
+  exphbs({
+    defaultLayout: "main",
+    extname: ".hbs",
+    runtimeOptions: {
+      allowProtoPropertiesByDefault: true,
+      allowProtoMethodsByDefault: true,
+    },
+  })
+);
+
+app.set("view engine", "hbs");
 
 const saveMongoData = require("./controllers/saveMongoData");
 const getPaper = require("./controllers/getPaper");
@@ -20,12 +37,15 @@ mongoose.connect(process.env.MONGODB_URI, {
 });
 
 app.get("/", async (req, res) => {
-  res.send("Welcome to homepage");
+  res.sendFile(__dirname + "/views/home.html");
 });
 
-app.get("/paper", async (req, res) => {
-  const papers = await getPaper(req, res, mongoose);
-  res.send(papers);
+app.get("/papers", async (req, res) => {
+  const { courseId, papers } = await getPaper(req, res, mongoose);
+  res.render("papers", {
+    courseId,
+    papers,
+  });
 });
 
 // For saving of exam papers

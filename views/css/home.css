@@ -1,0 +1,38 @@
+.search {
+  margin-top: 16px;
+  text-align: center;
+}
+
+.searc form {
+  display: flex;
+  flex-direction: column;
+}
+
+.search form label {
+  font-family: "Courier New", Courier, monospace;
+  font-size: larger;
+}
+
+.search form input {
+  height: 40px;
+  min-width: 200px;
+  font-family: "Courier New", Courier, monospace;
+  font-size: large;
+}
+
+.search form button {
+  margin-top: 16px;
+  border: 2px solid black;
+  width: 120px;
+  height: 40px;
+  font-size: larger;
+  background-color: white;
+  box-shadow: 8px 4px 2px black;
+  outline: none;
+}
+
+.search form button:active {
+  transition: all ease-in-out 0.2s;
+  box-shadow: 4px 2px 1px grey;
+  outline: none;
+}

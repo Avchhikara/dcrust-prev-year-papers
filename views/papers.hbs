@@ -1,0 +1,26 @@
+<section class="head">
+  <span>DCRUST previous year papers</span>
+</section>
+<main class="result-papers">
+  <div class="title-bar">
+    <span>Previous year papers for course Id: {{courseId}}</span>
+    <a type="button" href="/">Back home</a>
+  </div>
+  <ul class="papers">
+    {{#each papers}}
+    <li class="paper">
+      <a href={{this.paperUrl}} target="_blank">
+        Paper {{@index}} | {{this.courseName}}
+      </a>
+    </li>
+    {{else}}
+    <li class="paper">
+      No Papers found
+    </li>
+    {{/each}}
+  </ul>
+</main>
+<footer>
+  Made with 🖤 by
+  <a href="https://www.linkedin.com/in/avnishchhikara">Avnish</a> at DCRUST
+</footer>

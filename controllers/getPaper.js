@@ -2,7 +2,7 @@ const Paper = require("./../model/paper");
 
 module.exports = async (req, res, mongoose) => {
   const { courseId, courseName } = req.query;
-  console.log(courseId, courseName);
+  // console.log(courseId, courseName);
   var papers = [];
   if (courseId) {
     const re = RegExp(courseId);
@@ -26,5 +26,8 @@ module.exports = async (req, res, mongoose) => {
       }
     );
   }
-  return papers;
+  return {
+    papers,
+    courseId,
+  };
 };
