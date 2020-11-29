@@ -5,8 +5,6 @@ const exphbs = require("express-handlebars");
 
 const app = express();
 
-// TODO: Remove the duplicates problem, and build the UI, Use pug or handlebars for UI
-
 const dotenv = require("dotenv");
 dotenv.config();
 

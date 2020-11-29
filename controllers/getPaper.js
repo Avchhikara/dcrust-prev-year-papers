@@ -5,7 +5,7 @@ module.exports = async (req, res, mongoose) => {
   // console.log(courseId, courseName);
   var papers = [];
   if (courseId) {
-    const re = RegExp(courseId);
+    const re = RegExp(courseId.toUpperCase());
     papers = await Paper.find(
       {
         courseId: { $regex: re },
