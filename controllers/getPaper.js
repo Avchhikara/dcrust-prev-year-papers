@@ -1,4 +1,5 @@
 const Paper = require("./../model/paper");
+const SearchLog = require("./../model/SearchLog");
 
 module.exports = async (req, res, mongoose) => {
   const { courseId, courseName } = req.query;
@@ -26,6 +27,14 @@ module.exports = async (req, res, mongoose) => {
       }
     );
   }
+
+  // Saving the search logs as well.
+  const log = new SearchLog({
+    courseId,
+    ip: req.ip,
+  });
+  await log.save();
+
   return {
     papers,
     courseId,
