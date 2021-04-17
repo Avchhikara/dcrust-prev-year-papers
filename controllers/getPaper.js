@@ -31,7 +31,7 @@ module.exports = async (req, res, mongoose) => {
   // Saving the search logs as well.
   const log = new SearchLog({
     courseId,
-    ip: req.ip,
+    ip: req.headers["x-forwarded-for"] || req.connection.remoteAddress,
   });
   await log.save();
 
